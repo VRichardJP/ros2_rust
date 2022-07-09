@@ -64,7 +64,7 @@ def generate_rs(generator_arguments_file, typesupport_impls):
     (Path(args['output_dir']) / 'rust/src').mkdir(parents=True, exist_ok=True)
 
     for dep_tuple in args.get('ros_interface_dependencies', []):
-        dep_parts = dep_tuple.rsplit(':', 1)
+        dep_parts = dep_tuple.split(':', 1)
         assert len(dep_parts) == 2
         if dep_parts[0] != package_name:
             dependency_packages.add(dep_parts[0])
@@ -80,6 +80,9 @@ def generate_rs(generator_arguments_file, typesupport_impls):
         locator = IdlLocator(*idl_parts)
         idl_file = parse_idl_file(locator)
         idl_content.elements += idl_file.content.elements
+
+    import sys; print("XYZ ros_interface_dependencies =", args.get('ros_interface_dependencies', []), file=sys.stderr)
+    import sys; print("XYZ dependency_packages =", dependency_packages, file=sys.stderr)
 
     typesupport_impls = typesupport_impls.split(';')
 
